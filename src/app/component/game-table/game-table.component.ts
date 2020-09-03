@@ -14,7 +14,8 @@ import { PeerCursor } from '@udonarium/peer-cursor';
 import { TableSelecter } from '@udonarium/table-selecter';
 import { Terrain } from '@udonarium/terrain';
 import { TextNote } from '@udonarium/text-note';
-
+import { Cutin } from "@udonarium/cutin";
+import { CutinView} from "@udonarium/cutin-view";
 import { GameTableSettingComponent } from 'component/game-table-setting/game-table-setting.component';
 import { InputHandler } from 'directive/input-handler';
 import { ContextMenuAction, ContextMenuSeparator, ContextMenuService } from 'service/context-menu.service';
@@ -81,6 +82,8 @@ export class GameTableComponent implements OnInit, OnDestroy, AfterViewInit {
   get cardStacks(): CardStack[] { return this.tabletopService.cardStacks; }
   get terrains(): Terrain[] { return this.tabletopService.terrains; }
   get textNotes(): TextNote[] { return this.tabletopService.textNotes; }
+  get cutins(): Cutin[] {return this.tabletopService.cutins;}
+  get cutinViews(): CutinView[] {return this.tabletopService.cutinViews;}
   get diceSymbols(): DiceSymbol[] { return this.tabletopService.diceSymbols; }
   get peerCursors(): PeerCursor[] { return this.tabletopService.peerCursors; }
 

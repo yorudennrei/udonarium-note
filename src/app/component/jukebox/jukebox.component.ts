@@ -3,6 +3,7 @@ import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AudioFile } from '@udonarium/core/file-storage/audio-file';
 import { AudioPlayer, VolumeType } from '@udonarium/core/file-storage/audio-player';
 import { AudioStorage } from '@udonarium/core/file-storage/audio-storage';
+import { PresetSound, SoundEffect } from '@udonarium/sound-effect';
 import { FileArchiver } from '@udonarium/core/file-storage/file-archiver';
 import { ObjectStore } from '@udonarium/core/synchronize-object/object-store';
 import { EventSystem } from '@udonarium/core/system';
@@ -24,10 +25,15 @@ export class JukeboxComponent implements OnInit, OnDestroy {
   get auditionVolume(): number { return AudioPlayer.auditionVolume; }
   set auditionVolume(auditionVolume: number) { AudioPlayer.auditionVolume = auditionVolume; }
 
+  get sfxVolume(): number { return AudioPlayer.sfxVolume; }
+  set sfxVolume(sfxVolume: number) { AudioPlayer.sfxVolume = sfxVolume; }
+
   get audios(): AudioFile[] { return AudioStorage.instance.audios.filter(audio => !audio.isHidden); }
   get jukebox(): Jukebox { return ObjectStore.instance.get<Jukebox>('Jukebox'); }
+  get soundEffect(): SoundEffect { return ObjectStore.instance.get<SoundEffect>('SoundEffect'); }
 
   readonly auditionPlayer: AudioPlayer = new AudioPlayer();
+  readonly sfxPlayer: AudioPlayer = new AudioPlayer();
   private lazyUpdateTimer: NodeJS.Timer = null;
 
   constructor(
@@ -39,6 +45,7 @@ export class JukeboxComponent implements OnInit, OnDestroy {
   ngOnInit() {
     Promise.resolve().then(() => this.modalService.title = this.panelService.title = 'ジュークボックス');
     this.auditionPlayer.volumeType = VolumeType.AUDITION;
+    this.sfxPlayer.volumeType = VolumeType.SOUND_EFFECT;
     EventSystem.register(this)
       .on('*', event => {
         if (event.eventName.startsWith('FILE_')) this.lazyNgZoneUpdate();
@@ -56,6 +63,14 @@ export class JukeboxComponent implements OnInit, OnDestroy {
 
   stop() {
     this.auditionPlayer.stop();
+  }
+
+  playSFX(audio: AudioFile) {
+    let event = AudioStorage.instance.add(audio).identifier;
+    SoundEffect.play(event);
+  }
+  stopSFX() {
+    SoundEffect.play('');
   }
 
   playBGM(audio: AudioFile) {
