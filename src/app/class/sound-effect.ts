@@ -1,6 +1,6 @@
 import { ChatMessage, ChatMessageContext } from './chat-message';
 import { AudioFile } from './core/file-storage/audio-file';
-import { AudioPlayer } from './core/file-storage/audio-player';
+import { AudioPlayer, VolumeType } from './core/file-storage/audio-player';
 import { AudioStorage } from './core/file-storage/audio-storage';
 import { SyncObject } from './core/synchronize-object/decorator';
 import { GameObject } from './core/synchronize-object/game-object';
@@ -23,16 +23,19 @@ export class PresetSound {
   static lock: string = '';
   static unlock: string = '';
   static sweep: string = '';
+  static bell: string = '';
 }
 
 @SyncObject('sound-effect')
 export class SoundEffect extends GameObject {
+   readonly sfxPlayer: AudioPlayer = new AudioPlayer();
   // GameObject Lifecycle
   onStoreAdded() {
     super.onStoreAdded();
+    this.sfxPlayer.volumeType = VolumeType.SOUND_EFFECT;
     EventSystem.register(this)
       .on<string>('SOUND_EFFECT', event => {
-        AudioPlayer.play(AudioStorage.instance.get(event.data), 0.5);
+        this.sfxPlayer.play(AudioStorage.instance.get(event.data));
       })
       .on('SEND_MESSAGE', event => {
         let chatMessage = ObjectStore.instance.get<ChatMessage>(event.data.messageIdentifier);

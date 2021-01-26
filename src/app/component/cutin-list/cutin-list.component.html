@@ -1,0 +1,34 @@
+
+<div>
+  <div class="title">
+
+      <h2>カットイン</h2>
+
+      <!-- <button (click)="addRooperCard()">
+          <i class="material-icons">person_add</i>
+      </button> -->
+  </div>
+  <table>
+      <tr>
+        <th>画像</th>
+          <button (click)="openModal('imageIdentifier', true)">画像追加</button>
+        <th></th>
+      </tr>
+      <ng-container *ngFor="let cutin of cutins"class="image">
+        <tr>
+          <td><img [src]="cutin.imageFile.url | safe: 'resourceUrl'"></td>
+          <td>
+            <button (click)="open(cutin)">表示</button>
+          </td>
+        </tr>
+      </ng-container>
+    </table>
+
+<div>
+  <div *ngFor="let audio of audios" class="box">
+    <button  (click)="setSoundEffect(audio)" [disabled]="!audio.isReady" >カットイン曲選択</button>
+    <span>{{audio.name}}</span>
+    <span *ngIf="audio.name === getSoundEffectCutin.name">【選択中】</span>
+  </div>
+  <div *ngIf="audios.length < 1" >アップロードされた音楽ファイルはここに表示されます。</div>
+</div>

@@ -16,6 +16,8 @@ import { TableSelecter } from '@udonarium/table-selecter';
 import { TabletopObject } from '@udonarium/tabletop-object';
 import { Terrain } from '@udonarium/terrain';
 import { TextNote } from '@udonarium/text-note';
+import { Cutin } from '@udonarium/cutin';
+import { CutinView } from '@udonarium/cutin-view';
 
 import { CoordinateService } from './coordinate.service';
 
@@ -44,6 +46,12 @@ export class TabletopService {
     let viewTable = this.tableSelecter.viewTable;
     return viewTable ? viewTable.terrains : [];
   });
+  private cutinCache = new TabletopCache<Cutin>(() =>
+    ObjectStore.instance.getObjects(Cutin)
+  );
+  private cutinViewCache  = new TabletopCache<CutinView>(()=>
+    ObjectStore.instance.getObjects(CutinView)
+  );
   private textNoteCache = new TabletopCache<TextNote>(() => ObjectStore.instance.getObjects(TextNote));
   private diceSymbolCache = new TabletopCache<DiceSymbol>(() => ObjectStore.instance.getObjects(DiceSymbol));
 
@@ -53,6 +61,8 @@ export class TabletopService {
   get tableMasks(): GameTableMask[] { return this.tableMaskCache.objects; }
   get terrains(): Terrain[] { return this.terrainCache.objects; }
   get textNotes(): TextNote[] { return this.textNoteCache.objects; }
+  get cutins(): Cutin[] { return this.cutinCache.objects;}
+  get cutinViews(): CutinView[] { return this.cutinViewCache.objects;}
   get diceSymbols(): DiceSymbol[] { return this.diceSymbolCache.objects; }
   get peerCursors(): PeerCursor[] { return ObjectStore.instance.getObjects<PeerCursor>(PeerCursor); }
 
@@ -121,6 +131,10 @@ export class TabletopService {
         return this.textNoteCache;
       case DiceSymbol.aliasName:
         return this.diceSymbolCache;
+      case Cutin.aliasName:
+        return this.cutinCache;
+      case CutinView.aliasName:
+        return this.cutinViewCache;
       default:
         return null;
     }
@@ -138,6 +152,8 @@ export class TabletopService {
     this.tableMaskCache.refresh();
     this.terrainCache.refresh();
     this.textNoteCache.refresh();
+    this.cutinCache.refresh();
+    this.cutinViewCache.refresh();
     this.diceSymbolCache.refresh();
 
     this.clearMap();

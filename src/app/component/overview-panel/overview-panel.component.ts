@@ -16,6 +16,7 @@ import { DataElement } from '@udonarium/data-element';
 import { TabletopObject } from '@udonarium/tabletop-object';
 import { GameObjectInventoryService } from 'service/game-object-inventory.service';
 import { PointerDeviceService } from 'service/pointer-device.service';
+import { CutinViewComponent} from 'component/cutin-view/cutin-view.component';
 
 @Component({
   selector: 'overview-panel',
@@ -58,6 +59,7 @@ export class OverviewPanelComponent implements AfterViewInit, OnDestroy {
 
   get pointerEventsStyle(): any { return { 'is-pointer-events-auto': !this.isPointerDragging, 'pointer-events-none': this.isPointerDragging }; }
 
+  get isOpenCutin(): boolean { return this.isOpenImageView && this.tabletopObject.aliasName === 'cutin-view'; }
   isOpenImageView: boolean = false;
 
   constructor(
@@ -66,6 +68,11 @@ export class OverviewPanelComponent implements AfterViewInit, OnDestroy {
     private pointerDeviceService: PointerDeviceService
   ) { }
 
+  ngOnInit() {
+    if (this.tabletopObject.aliasName === 'cutin-view') {
+      this.isOpenImageView = true;
+    }
+  }
   ngAfterViewInit() {
     this.initPanelPosition();
     setTimeout(() => {
@@ -155,5 +162,9 @@ export class OverviewPanelComponent implements AfterViewInit, OnDestroy {
 
   private getInventoryTags(gameObject: TabletopObject): DataElement[] {
     return this.inventoryService.tableInventory.dataElementMap.get(gameObject.identifier);
+  }
+    close() {
+    this.tabletopObject.destroy();
+    this.chanageImageView(false);
   }
 }
