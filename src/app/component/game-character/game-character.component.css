@@ -76,7 +76,7 @@
   width: 100%;
   box-sizing: border-box;
   border: solid 6px #FFCC80;
-  border-radius: 25px;
+  border-radius: 10px;
 }
 
 .pedestal-outer {
@@ -86,7 +86,7 @@
   width: 100%;
   box-sizing: border-box;
   border: solid 2px #212121;
-  border-radius: 25px;
+  border-radius: 10px;
 }
 
 .upright-transform {
@@ -94,7 +94,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  transform: rotateX(-90deg) translateY(-50%);
+  /* transform: rotateX(-90deg) translateY(-50%); */
 }
 
 .is-fit-width {

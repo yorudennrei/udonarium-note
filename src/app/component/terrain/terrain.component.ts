@@ -149,21 +149,21 @@ export class TerrainComponent implements OnInit, OnDestroy, AfterViewInit {
             SoundEffect.play(PresetSound.lock);
           }
         }),
-      ContextMenuSeparator,
-      (this.hasWall
-        ? {
-          name: '壁を非表示', action: () => {
-            this.mode = TerrainViewState.FLOOR;
-            if (this.depth * this.width === 0) {
-              this.terrain.width = this.width <= 0 ? 1 : this.width;
-              this.terrain.depth = this.depth <= 0 ? 1 : this.depth;
-            }
-          }
-        } : {
-          name: '壁を表示', action: () => {
-            this.mode = TerrainViewState.ALL;
-          }
-        }),
+      // ContextMenuSeparator,
+      // (this.hasWall
+      //   ? {
+      //     name: '壁を非表示', action: () => {
+      //       this.mode = TerrainViewState.FLOOR;
+      //       if (this.depth * this.width === 0) {
+      //         this.terrain.width = this.width <= 0 ? 1 : this.width;
+      //         this.terrain.depth = this.depth <= 0 ? 1 : this.depth;
+      //       }
+      //     }
+      //   } : {
+      //     name: '壁を表示', action: () => {
+      //       this.mode = TerrainViewState.ALL;
+      //     }
+      //   }),
       ContextMenuSeparator,
       { name: '地形設定を編集', action: () => { this.showDetail(this.terrain); } },
       {
